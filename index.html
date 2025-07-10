@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب صلاحيات الإعلان - وكالة تسويق تجهيز المطابخ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5e92;
+            --secondary: #e74c3c;
+            --accent: #27ae60;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        header {
+            background: linear-gradient(120deg, var(--primary) 0%, #1a3a5f 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 50%;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            max-width: 700px;
+            margin: 30px auto 0;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+        
+        .content {
+            padding: 40px 20px;
+        }
+        
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        .step-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .step-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .step-description {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .step-content {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input[type="email"], input[type="text"] {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 94, 146, 0.2);
+        }
+        
+        .platforms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .platform {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .platform.selected {
+            border-color: var(--primary);
+            background: rgba(44, 94, 146, 0.05);
+            transform: translateY(-5px);
+        }
+        
+        .platform i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .platform h3 {
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .btn:hover {
+            background: #1a3a5f;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(44, 94, 146, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #c0392b;
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background: #219653;
+        }
+        
+        .link-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px dashed var(--primary);
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .link-container a {
+            display: block;
+            background: rgba(44, 94, 146, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            word-break: break-all;
+            transition: all 0.3s ease;
+        }
+        
+        .link-container a:hover {
+            background: rgba(44, 94, 146, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .link-container i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .confirmation {
+            text-align: center;
+            padding: 20px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            margin: 20px 0;
+        }
+        
+        .confirmation i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .dashboard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .campaigns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .campaign {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .campaign h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .campaign-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .permissions-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+        
+        .permission-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .permission-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .permission-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(44, 94, 146, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .permission-status {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--accent);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--dark);
+            color: white;
+            margin-top: 40px;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                border-radius: 12px;
+            }
+            
+            .tab {
+                border-radius: 8px;
+                margin-bottom: 5px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .step-title {
+                font-size: 1.5rem;
+            }
+            
+            .step-content {
+                padding: 20px 15px;
+            }
+            
+            .dashboard {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-kitchen-set"></i>
+                <div>
+                    <h1>طلب صلاحيات إدارة الإعلانات</h1>
+                    <p class="subtitle">منصة احترافية لتمكين وكالة تسويق المطابخ من إدارة حملاتك الإعلانية بكفاءة وأمان</p>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-step="1">البداية</div>
+                <div class="tab" data-step="2">تحديد المنصات</div>
+                <div class="tab" data-step="3">منح الصلاحية</div>
+                <div class="tab" data-step="4">التأكيد</div>
+                <div class="tab" data-step="5">لوحة المتابعة</div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <!-- الخطوة 1: البداية -->
+            <div class="step active" id="step-1">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h2 class="step-title">مرحباً في نظام طلب الصلاحيات</h2>
+                    <p class="step-description">نظام آمن وسهل لتمكين وكالتنا من إدارة حملاتك الإعلانية على وسائل التواصل الاجتماعي</p>
+                </div>
+                
+                <div class="step-content">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <i class="fas fa-lock" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
+                        <h3 style="margin-bottom: 15px;">لماذا نحتاج الصلاحيات؟</h3>
+                        <p>لنتمكن من إنشاء وتحسين الحملات الإعلانية لمطابخك، مع الحفاظ على أمان حسابك التام</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: var(--shadow);">
+                            <i class="fas fa-bullhorn" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                            <h4 style="margin-bottom: 10px;">إنشاء حملات احترافية</h4>
+                            <p>تصميم إعلانات جذابة تعكس جودة منتجاتك</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: var(--shadow);">
+                            <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                            <h4 style="margin-bottom: 10px;">تحسين الأداء اليومي</h4>
+                            <p>ضبط الميزانيات واستهداف العملاء المحتملين</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: var(--shadow);">
+                            <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                            <h4 style="margin-bottom: 10px;">أمان تام لحسابك</h4>
+                            <p>لا وصول للبيانات المالية أو الحساب الشخصي</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 40px;">
+                        <label for="client-email"><i class="fas fa-envelope"></i> البريد الإلكتروني للعميل</label>
+                        <input type="email" id="client-email" placeholder="أدخل بريدك الإلكتروني">
+                    </div>
+                    
+                    <button class="btn" onclick="nextStep(2)">بدء العملية <i class="fas fa-arrow-left"></i></button>
+                </div>
+            </div>
+            
+            <!-- الخطوة 2: تحديد المنصات -->
+            <div class="step" id="step-2">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h2 class="step-title">اختر منصات الإعلان</h2>
+                    <p class="step-description">حدد المنصات التي تريد أن ندير فيها حملاتك الإعلانية</p>
+                </div>
+                
+                <div class="step-content">
+                    <div class="platforms">
+                        <div class="platform" data-platform="meta">
+                            <i class="fab fa-facebook"></i>
+                            <h3>فيسبوك/إنستجرام</h3>
+                            <p>الأنسب لاستهداف أصحاب المنازل</p>
+                        </div>
+                        
+                        <div class="platform" data-platform="tiktok">
+                            <i class="fab fa-tiktok"></i>
+                            <h3>تيك توك</h3>
+                            <p>الأنسب للفئة العمرية الشابة</p>
+                        </div>
+                        
+                        <div class="platform" data-platform="google">
+                            <i class="fab fa-google"></i>
+                            <h3>جوجل/يوتيوب</h3>
+                            <p>الأنسب للبحث عن حلول تجهيز مطابخ</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="nextStep(3)">توليد روابط الصلاحية <i class="fas fa-link"></i></button>
+                </div>
+            </div>
+            
+            <!-- الخطوة 3: منح الصلاحية -->
+            <div class="step" id="step-3">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h2 class="step-title">منح الصلاحية</h2>
+                    <p class="step-description">انقر على الروابط أدناه لمنحنا الصلاحيات المطلوبة</p>
+                </div>
+                
+                <div class="step-content">
+                    <div class="link-container">
+                        <h3><i class="fab fa-facebook"></i> فيسبوك/إنستجرام</h3>
+                        <a href="#" target="_blank">
+                            https://business.facebook.com/settings/people/?email=agency@kitchenads.com&role=ADMIN
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <p>ستنقلك إلى صفحة إدارة الأعمال في فيسبوك</p>
+                    </div>
+                    
+                    <div class="link-container">
+                        <h3><i class="fab fa-tiktok"></i> تيك توك</h3>
+                        <a href="#" target="_blank">
+                            https://ads.tiktok.com/business/partner/add?partner_email=agency@kitchenads.com&role_type=AGENCY
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <p>ستنقلك إلى مركز الأعمال في تيك توك</p>
+                    </div>
+                    
+                    <button class="btn btn-accent" onclick="nextStep(4)">لقد منحت الصلاحيات <i class="fas fa-check"></i></button>
+                </div>
+            </div>
+            
+            <!-- الخطوة 4: التأكيد -->
+            <div class="step" id="step-4">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <h2 class="step-title">تم تفعيل الصلاحيات بنجاح!</h2>
+                    <p class="step-description">شكراً لك، يمكنك الآن متابعة أداء حملاتك الإعلانية</p>
+                </div>
+                
+                <div class="step-content">
+                    <div class="confirmation">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>تم تفعيل الصلاحيات بنجاح</h3>
+                        <p>تم تفعيل صلاحيات الوكالة على المنصات المحددة</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <h3 style="margin-bottom: 20px;">ماذا يحدث الآن؟</h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                            <div>
+                                <i class="fas fa-ad" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                                <h4>إنشاء الحملات</h4>
+                                <p>سنبدأ في تصميم حملاتك الإعلانية</p>
+                            </div>
+                            
+                            <div>
+                                <i class="fas fa-chart-pie" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                                <h4>التحليل اليومي</h4>
+                                <p>متابعة أداء الحملات وتحسينها</p>
+                            </div>
+                            
+                            <div>
+                                <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                                <h4>تقرير الأداء</h4>
+                                <p>ستصلك تقارير أسبوعية بالأداء</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-accent" onclick="nextStep(5)">الذهاب إلى لوحة المتابعة <i class="fas fa-tachometer-alt"></i></button>
+                </div>
+            </div>
+            
+            <!-- الخطوة 5: لوحة المتابعة -->
+            <div class="step" id="step-5">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <h2 class="step-title">لوحة متابعة الحملات</h2>
+                    <p class="step-description">تابع أداء حملاتك الإعلانية وإدارة الصلاحيات</p>
+                </div>
+                
+                <div class="dashboard">
+                    <div class="dashboard-header">
+                        <div class="user-info">
+                            <div class="user-avatar">م</div>
+                            <div>
+                                <h3>صاحب مطابخ الدانة</h3>
+                                <p>رقم العميل: #K-2356</p>
+                            </div>
+                        </div>
+                        <div class="status">
+                            <span class="permission-status">نشط</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 style="margin-bottom: 20px;">الحملات النشطة</h3>
+                        <div class="campaigns">
+                            <div class="campaign">
+                                <h3>حملة مطابخ صيف ٢٠٢٤</h3>
+                                <p>فيسبوك وإنستجرام</p>
+                                <div class="campaign-stats">
+                                    <div class="stat">
+                                        <div class="stat-value">15K</div>
+                                        <div class="stat-label">ظهور</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-value">32</div>
+                                        <div class="stat-label">اتصالات</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-value">8.2%</div>
+                                        <div class="stat-label">CTR</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="campaign">
+                                <h3>عروض المطابخ الكلاسيكية</h3>
+                                <p>تيك توك</p>
+                                <div class="campaign-stats">
+                                    <div class="stat">
+                                        <div class="stat-value">8.7K</div>
+                                        <div class="stat-label">ظهور</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-value">18</div>
+                                        <div class="stat-label">اتصالات</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-value">12.1%</div>
+                                        <div class="stat-label">CTR</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="permissions-section">
+                        <h3 style="margin-bottom: 20px;">إدارة الصلاحيات</h3>
+                        
+                        <div class="permission-card">
+                            <div class="permission-info">
+                                <div class="permission-icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </div>
+                                <div>
+                                    <h4>فيسبوك/إنستجرام</h4>
+                                    <p>صلاحية: مدير إعلانات</p>
+                                </div>
+                            </div>
+                            <div class="permission-status">نشط</div>
+                        </div>
+                        
+                        <div class="permission-card">
+                            <div class="permission-info">
+                                <div class="permission-icon">
+                                    <i class="fab fa-tiktok"></i>
+                                </div>
+                                <div>
+                                    <h4>تيك توك</h4>
+                                    <p>صلاحية: وكالة</p>
+                                </div>
+                            </div>
+                            <div class="permission-status">نشط</div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; margin-top: 30px;">
+                            <button class="btn btn-secondary" style="flex: 1;">
+                                إزالة الصلاحية <i class="fas fa-times"></i>
+                            </button>
+                            <button class="btn" style="flex: 1;">
+                                تحديث الصلاحية <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <h3>وكالة كمالك لتسويق تجهيز المطابخ</h3>
+            <p>منصة احترافية لإدارة الحملات الإعلانية لشركات تجهيز المطابخ</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+966 55 123 4567</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@kitchenads.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>واتساب: +966 55 123 4567</span>
+                </div>
+            </div>
+            
+            <p>© 2023 جميع الحقوق محفوظة | نظام آمن ومحكم لحماية بياناتك</p>
+        </footer>
+    </div>
+    
+    <script>
+        // متابعة الخطوات
+        function nextStep(step) {
+            // إخفاء جميع الخطوات
+            document.querySelectorAll('.step').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // إظهار الخطوة المطلوبة
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // تحديث التبويبات
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if(tab.dataset.step == step) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // إذا كنا في الخطوة 5، نبدأ المؤثرات
+            if(step === 5) {
+                setTimeout(() => {
+                    document.querySelector('.dashboard').style.animation = 'fadeIn 0.8s ease';
+                }, 300);
+            }
+        }
+        
+        // اختيار المنصات
+        document.querySelectorAll('.platform').forEach(platform => {
+            platform.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // جعل التبويبات قابلة للنقر
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const step = this.dataset.step;
+                nextStep(step);
+            });
+        });
+    </script>
+</body>
+</html>
