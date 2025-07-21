@@ -1,106 +1,243 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOBEK MEDIA - Access Setup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <title>MOBEK MEDIA Access Setup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
+      margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #fff;
-      color: #222;
-      padding: 2rem;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background-color: #e3ad55;
+      padding: 1rem 2rem;
+      text-align: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .container {
       max-width: 800px;
       margin: auto;
-    }
-    h1, h2 {
-      color: #e3ad55;
+      padding: 2rem 1rem;
     }
     .step {
-      margin-bottom: 2rem;
-      border-left: 4px solid #e3ad55;
-      padding-left: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      position: relative;
     }
-    .button {
+    .step h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+    }
+    .step .actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    button, .copy-btn {
       background-color: #e3ad55;
-      color: #fff;
+      color: white;
       border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      margin-top: 0.5rem;
     }
-    .button:hover {
-      background-color: #cf983c;
+    .progress {
+      height: 10px;
+      border-radius: 5px;
+      background: #ddd;
+      margin: 1rem 0;
+      overflow: hidden;
     }
-    .video-modal {
+    .progress-bar {
+      height: 10px;
+      background-color: #e3ad55;
+      width: 0%;
+      transition: width 0.3s ease-in-out;
+    }
+    .status {
+      position: absolute;
+      right: 1.5rem;
+      top: 1.5rem;
+      font-size: 1.2rem;
+    }
+    .completed {
+      color: green;
+    }
+    .not-completed {
+      color: red;
+    }
+    .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
       justify-content: center;
       align-items: center;
-      z-index: 1000;
     }
-    .video-content {
-      background: #fff;
+    .modal-content {
+      background: white;
       padding: 1rem;
-      border-radius: 8px;
-      max-width: 90%;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
     }
-    .close-btn {
-      float: right;
-      cursor: pointer;
-      font-weight: bold;
-      color: #e3ad55;
-    }
-    .copy-btn {
-      margin-left: 0.5rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: #e3ad55;
+    iframe {
+      width: 100%;
+      height: 315px;
+      border: none;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to MOBEK MEDIA Access Setup</h1>
-  <p>To launch your campaigns, please follow the steps below. You can watch the tutorial video for any step if you need help.</p>
-
-  <!-- Step 1: Partner Access -->
-  <div class="step">
-    <h2>1. Grant Partner Access</h2>
-    <p>Go to <a href="https://business.facebook.com/settings/partners" target="_blank">Business Settings</a> and click "Add" to invite us as a partner.</p>
-    <p>Our Business ID: <strong id="biz-id">123456789101112</strong> 
-      <span class="copy-btn" onclick="copyText('biz-id')">[Copy]</span>
-    </p>
-    <button class="button" onclick="openModal('video1')">Watch Tutorial</button>
+  <header>
+    MOBEK MEDIA Access Setup
+  </header>
+  <div class="container">
+    <div class="progress">
+      <div id="progressBar" class="progress-bar"></div>
+    </div><div class="step" data-step>
+  <h2>1. Add MOBEK MEDIA as a Partner (Meta)</h2>
+  <p>Use this Business ID: <strong id="bmId">1234567890</strong></p>
+  <div class="actions">
+    <button onclick="copyToClipboard('bmId')">Copy ID</button>
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial1')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
   </div>
+  <div class="status">❌</div>
+</div>
 
-  <!-- Future Steps (Ad Account, Page, Pixel, etc.) will go here -->
-
-  <!-- VIDEO MODAL -->
-  <div class="video-modal" id="video1">
-    <div class="video-content">
-      <span class="close-btn" onclick="closeModal('video1')">&times;</span>
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" 
-        title="Partner Access Tutorial" frameborder="0" allowfullscreen></iframe>
-    </div>
+<div class="step" data-step>
+  <h2>2. Grant Access to Facebook Page</h2>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial2')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
   </div>
+  <div class="status">❌</div>
+</div>
 
-  <script>
-    function openModal(id) {
-      document.getElementById(id).style.display = 'flex';
-    }
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-    function copyText(id) {
-      const text = document.getElementById(id).innerText;
+<div class="step" data-step>
+  <h2>3. Grant Access to Ad Account</h2>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial3')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
+  </div>
+  <div class="status">❌</div>
+</div>
+
+<div class="step" data-step>
+  <h2>4. Connect Instagram Account</h2>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial4')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
+  </div>
+  <div class="status">❌</div>
+</div>
+
+<div class="step" data-step>
+  <h2>5. Pixel Setup</h2>
+  <p>If no Pixel exists, click the button below to request installation.</p>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial5')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
+  </div>
+  <div class="status">❌</div>
+</div>
+
+<div class="step" data-step>
+  <h2>6. Catalog Access (if applicable)</h2>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial6')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
+  </div>
+  <div class="status">❌</div>
+</div>
+
+<div class="step" data-step>
+  <h2>7. TikTok Business Access</h2>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial7')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
+  </div>
+  <div class="status">❌</div>
+</div>
+
+<div class="step" data-step>
+  <h2>8. Google Ads Account Access</h2>
+  <div class="actions">
+    <button onclick="openModal('https://www.youtube.com/embed/tutorial8')">Watch Tutorial</button>
+    <button onclick="markComplete(this)">✅ Done</button>
+  </div>
+  <div class="status">❌</div>
+</div>
+
+<!-- Video Modal -->
+<div id="videoModal" class="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <iframe id="videoFrame" src="" allowfullscreen></iframe>
+  </div>
+</div>
+
+  </div>  <script>
+    function copyToClipboard(id) {
+      const text = document.getElementById(id).textContent;
       navigator.clipboard.writeText(text);
-      alert("Copied!");
+      alert('Copied!');
     }
-  </script>
-</body>
+
+    function openModal(videoUrl) {
+      document.getElementById('videoFrame').src = videoUrl;
+      document.getElementById('videoModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('videoModal').style.display = 'none';
+      document.getElementById('videoFrame').src = '';
+    }
+
+    function markComplete(button) {
+      const step = button.closest('[data-step]');
+      step.querySelector('.status').textContent = '✅';
+      step.querySelector('.status').classList.add('completed');
+      updateProgress();
+      sendProgress();
+    }
+
+    function updateProgress() {
+      const steps = document.querySelectorAll('[data-step]');
+      const total = steps.length;
+      let completed = 0;
+      steps.forEach(s => {
+        if (s.querySelector('.status').textContent.includes('✅')) completed++;
+      });
+      const percent = (completed / total) * 100;
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    function sendProgress() {
+      const steps = Array.from(document.querySelectorAll('[data-step]'));
+      const data = steps.map((step, i) => {
+        const status = step.querySelector('.status').textContent.includes('✅') ? 'Done' : 'Pending';
+        const title = step.querySelector('h2').textContent;
+        return `${title}: ${status}`;
+      });
+
+      fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ steps: data, timestamp: new Date().toISOString() })
+      });
+    }
+  </script></body>
 </html>
