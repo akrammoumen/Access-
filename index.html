@@ -2,242 +2,130 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOBEK MEDIA Access Setup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Access Setup - MOBEK MEDIA</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
       background-color: #f9f9f9;
       color: #333;
-    }
-    header {
-      background-color: #e3ad55;
-      padding: 1rem 2rem;
-      text-align: center;
-      color: white;
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    .container {
-      max-width: 800px;
+      padding: 2rem;
+      max-width: 900px;
       margin: auto;
-      padding: 2rem 1rem;
+    }
+    h1, h2 {
+      color: #111;
     }
     .step {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-      padding: 1.5rem;
-      position: relative;
-    }
-    .step h2 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
-    }
-    .step .actions {
-      margin-top: 1rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    button, .copy-btn {
-      background-color: #e3ad55;
-      color: white;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .progress {
-      height: 10px;
-      border-radius: 5px;
-      background: #ddd;
-      margin: 1rem 0;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 10px;
-      background-color: #e3ad55;
-      width: 0%;
-      transition: width 0.3s ease-in-out;
-    }
-    .status {
-      position: absolute;
-      right: 1.5rem;
-      top: 1.5rem;
-      font-size: 1.2rem;
+      background: #fff;
+      border-left: 4px solid #e3ad55;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     .completed {
-      color: green;
+      border-color: #28a745;
+      background: #e8f5e9;
     }
-    .not-completed {
-      color: red;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background: white;
-      padding: 1rem;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 600px;
-    }
-    iframe {
-      width: 100%;
-      height: 315px;
+    button {
+      background-color: #e3ad55;
       border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      margin-top: 0.5rem;
     }
+    button:hover {
+      background-color: #c69543;
+    }
+    .platform-select button {
+      margin: 0.5rem;
+      padding: 1rem;
+      min-width: 100px;
+      font-weight: 600;
+    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <header>
-    MOBEK MEDIA Access Setup
-  </header>
-  <div class="container">
-    <div class="progress">
-      <div id="progressBar" class="progress-bar"></div>
-    </div><div class="step" data-step>
-  <h2>1. Add MOBEK MEDIA as a Partner (Meta)</h2>
-  <p>Use this Business ID: <strong id="bmId">1234567890</strong></p>
-  <div class="actions">
-    <button onclick="copyToClipboard('bmId')">Copy ID</button>
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial1')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
+  <h1>🔐 Start Your Access Setup</h1>
+  <p>Select the platforms you want to advertise on:</p>
+  <div class="platform-select">
+    <button onclick="selectPlatform('meta')">Meta</button>
+    <button onclick="selectPlatform('tiktok')">TikTok</button>
+    <button onclick="selectPlatform('google')">Google</button>
+  </div>  <div id="steps"></div>  <script>
+    const allSteps = {
+      meta: [
+        "Add MOBEK MEDIA as a partner in your Business Manager.",
+        "Grant access to your Facebook Page.",
+        "Grant access to your Ad Account.",
+        "Grant access to your Instagram Account.",
+        "Pixel setup (optional if not installed).",
+        "Add Catalog (if available)."
+      ],
+      tiktok: [
+        "Add MOBEK MEDIA to your TikTok Business Center.",
+        "Share Pixel access (or request pixel setup).",
+        "Share Ads Manager access."
+      ],
+      google: [
+        "Grant access to Google Ads Manager.",
+        "Share Pixel/Tag access or install Tag Manager.",
+        "Ensure billing settings are configured."
+      ]
+    };
 
-<div class="step" data-step>
-  <h2>2. Grant Access to Facebook Page</h2>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial2')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
+    let selectedPlatforms = [];
+    const stepsContainer = document.getElementById('steps');
 
-<div class="step" data-step>
-  <h2>3. Grant Access to Ad Account</h2>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial3')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
-
-<div class="step" data-step>
-  <h2>4. Connect Instagram Account</h2>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial4')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
-
-<div class="step" data-step>
-  <h2>5. Pixel Setup</h2>
-  <p>If no Pixel exists, click the button below to request installation.</p>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial5')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
-
-<div class="step" data-step>
-  <h2>6. Catalog Access (if applicable)</h2>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial6')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
-
-<div class="step" data-step>
-  <h2>7. TikTok Business Access</h2>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial7')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
-
-<div class="step" data-step>
-  <h2>8. Google Ads Account Access</h2>
-  <div class="actions">
-    <button onclick="openModal('https://www.youtube.com/embed/tutorial8')">Watch Tutorial</button>
-    <button onclick="markComplete(this)">✅ Done</button>
-  </div>
-  <div class="status">❌</div>
-</div>
-
-<!-- Video Modal -->
-<div id="videoModal" class="modal" onclick="closeModal()">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <iframe id="videoFrame" src="" allowfullscreen></iframe>
-  </div>
-</div>
-
-  </div>  <script>
-    function copyToClipboard(id) {
-      const text = document.getElementById(id).textContent;
-      navigator.clipboard.writeText(text);
-      alert('Copied!');
+    function selectPlatform(platform) {
+      if (!selectedPlatforms.includes(platform)) {
+        selectedPlatforms.push(platform);
+        renderSteps();
+      }
     }
 
-    function openModal(videoUrl) {
-      document.getElementById('videoFrame').src = videoUrl;
-      document.getElementById('videoModal').style.display = 'flex';
+    function renderSteps() {
+      stepsContainer.innerHTML = '';
+      selectedPlatforms.forEach(platform => {
+        const platformTitle = platform.charAt(0).toUpperCase() + platform.slice(1);
+        const steps = allSteps[platform];
+        const section = document.createElement('div');
+        section.innerHTML = `<h2>${platformTitle} Setup</h2>`;
+        steps.forEach((step, index) => {
+          const stepEl = document.createElement('div');
+          stepEl.className = 'step';
+          stepEl.innerHTML = `
+            <p>${index + 1}. ${step}</p>
+            <button onclick="markDone(this)">✅ I’ve completed this</button>
+          `;
+          section.appendChild(stepEl);
+        });
+        stepsContainer.appendChild(section);
+      });
     }
 
-    function closeModal() {
-      document.getElementById('videoModal').style.display = 'none';
-      document.getElementById('videoFrame').src = '';
-    }
-
-    function markComplete(button) {
-      const step = button.closest('[data-step]');
-      step.querySelector('.status').textContent = '✅';
-      step.querySelector('.status').classList.add('completed');
-      updateProgress();
+    function markDone(button) {
+      const step = button.parentElement;
+      step.classList.add('completed');
+      button.remove();
       sendProgress();
     }
 
-    function updateProgress() {
-      const steps = document.querySelectorAll('[data-step]');
-      const total = steps.length;
-      let completed = 0;
-      steps.forEach(s => {
-        if (s.querySelector('.status').textContent.includes('✅')) completed++;
-      });
-      const percent = (completed / total) * 100;
-      document.getElementById('progressBar').style.width = percent + '%';
-    }
-
     function sendProgress() {
-      const steps = Array.from(document.querySelectorAll('[data-step]'));
-      const data = steps.map((step, i) => {
-        const status = step.querySelector('.status').textContent.includes('✅') ? 'Done' : 'Pending';
-        const title = step.querySelector('h2').textContent;
-        return `${title}: ${status}`;
-      });
+      const completed = document.querySelectorAll('.completed p');
+      const steps = [...completed].map(e => e.innerText);
 
-      fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ steps: data, timestamp: new Date().toISOString() })
-      });
+      axios.post('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+        steps: steps,
+        timestamp: new Date().toISOString()
+      })
+      .then(res => console.log('Progress sent'))
+      .catch(err => console.error('Error sending progress', err));
     }
   </script></body>
 </html>
