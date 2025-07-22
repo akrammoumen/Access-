@@ -2,130 +2,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Access Setup - MOBEK MEDIA</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>MOBEK MEDIA – Ad Access Setup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1, h2 {
-      color: #111;
-    }
-    .step {
-      background: #fff;
-      border-left: 4px solid #e3ad55;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    .completed {
-      border-color: #28a745;
-      background: #e8f5e9;
-    }
-    button {
-      background-color: #e3ad55;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      color: white;
-      cursor: pointer;
-      margin-top: 0.5rem;
-    }
-    button:hover {
-      background-color: #c69543;
-    }
-    .platform-select button {
-      margin: 0.5rem;
-      padding: 1rem;
-      min-width: 100px;
-      font-weight: 600;
-    }
-    .hidden { display: none; }
+    body { font-family: 'Inter', sans-serif; }
+    .step-card:hover { box-shadow: 0 0 0 2px #e3ad55; }
+    .modal { display: none; position: fixed; z-index: 50; inset: 0; background: rgba(0, 0, 0, 0.7); }
+    .modal-content { background: white; padding: 1rem; max-width: 600px; margin: 10vh auto; border-radius: 0.5rem; }
   </style>
 </head>
-<body>
-  <h1>🔐 Start Your Access Setup</h1>
-  <p>Select the platforms you want to advertise on:</p>
-  <div class="platform-select">
-    <button onclick="selectPlatform('meta')">Meta</button>
-    <button onclick="selectPlatform('tiktok')">TikTok</button>
-    <button onclick="selectPlatform('google')">Google</button>
-  </div>  <div id="steps"></div>  <script>
-    const allSteps = {
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-4 text-center text-[#e3ad55]">Welcome to MOBEK MEDIA</h1>
+    <p class="text-center mb-6">Let’s set up the access we need to run your ads efficiently.</p><!-- Platform Selection -->
+<div class="mb-6">
+  <h2 class="text-xl font-semibold mb-2">Which platforms do you want to advertise on?</h2>
+  <div class="flex gap-4">
+    <label class="flex items-center gap-2">
+      <input type="checkbox" class="platform-checkbox" value="meta"> Meta
+    </label>
+    <label class="flex items-center gap-2">
+      <input type="checkbox" class="platform-checkbox" value="tiktok"> TikTok
+    </label>
+    <label class="flex items-center gap-2">
+      <input type="checkbox" class="platform-checkbox" value="google"> Google
+    </label>
+  </div>
+</div>
+
+<div id="steps-container" class="space-y-6"></div>
+
+  </div>  <!-- Modal -->  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <button onclick="closeModal()" class="mb-2 text-red-500">Close ✖</button>
+      <div id="videoContainer"></div>
+    </div>
+  </div>  <script>
+    const platformSteps = {
       meta: [
-        "Add MOBEK MEDIA as a partner in your Business Manager.",
-        "Grant access to your Facebook Page.",
-        "Grant access to your Ad Account.",
-        "Grant access to your Instagram Account.",
-        "Pixel setup (optional if not installed).",
-        "Add Catalog (if available)."
+        {
+          text: "Add us as a Partner in your Meta Business Manager",
+          link: "https://business.facebook.com/settings/partners/",
+          video: "https://www.loom.com/share/meta-partner"
+        },
+        {
+          text: "Grant access to your Facebook Page",
+          video: "https://www.loom.com/share/facebook-page-access"
+        },
+        {
+          text: "Grant access to your Ad Account",
+          video: "https://www.loom.com/share/meta-ad-account"
+        },
+        {
+          text: "Grant access to your Instagram account",
+          video: "https://www.loom.com/share/instagram-access"
+        },
+        {
+          text: "Do you have a Pixel installed?",
+          dynamic: true
+        },
+        {
+          text: "If you have a Catalog, grant access (optional)",
+          video: "https://www.loom.com/share/meta-catalog"
+        }
       ],
       tiktok: [
-        "Add MOBEK MEDIA to your TikTok Business Center.",
-        "Share Pixel access (or request pixel setup).",
-        "Share Ads Manager access."
+        {
+          text: "Add us to your TikTok Business Center",
+          link: "https://business.tiktok.com/business-center",
+          video: "https://www.loom.com/share/tiktok-access"
+        },
+        {
+          text: "Grant access to Ad Account and Pixel"
+        }
       ],
       google: [
-        "Grant access to Google Ads Manager.",
-        "Share Pixel/Tag access or install Tag Manager.",
-        "Ensure billing settings are configured."
+        {
+          text: "Grant access to your Google Ads Account",
+          video: "https://www.loom.com/share/google-ads-access"
+        },
+        {
+          text: "Share access to Tag Manager or Pixel",
+          video: "https://www.loom.com/share/tag-manager"
+        },
+        {
+          text: "Ensure billing settings are configured",
+          link: "https://ads.google.com/aw/billing",
+          video: "https://www.loom.com/share/google-billing"
+        }
       ]
     };
 
-    let selectedPlatforms = [];
-    const stepsContainer = document.getElementById('steps');
+    const stepsContainer = document.getElementById("steps-container");
 
-    function selectPlatform(platform) {
-      if (!selectedPlatforms.includes(platform)) {
-        selectedPlatforms.push(platform);
-        renderSteps();
-      }
-    }
+    document.querySelectorAll(".platform-checkbox").forEach(cb => {
+      cb.addEventListener("change", renderSteps);
+    });
 
     function renderSteps() {
-      stepsContainer.innerHTML = '';
-      selectedPlatforms.forEach(platform => {
-        const platformTitle = platform.charAt(0).toUpperCase() + platform.slice(1);
-        const steps = allSteps[platform];
-        const section = document.createElement('div');
-        section.innerHTML = `<h2>${platformTitle} Setup</h2>`;
-        steps.forEach((step, index) => {
-          const stepEl = document.createElement('div');
-          stepEl.className = 'step';
-          stepEl.innerHTML = `
-            <p>${index + 1}. ${step}</p>
-            <button onclick="markDone(this)">✅ I’ve completed this</button>
-          `;
-          section.appendChild(stepEl);
+      stepsContainer.innerHTML = "";
+      const selected = [...document.querySelectorAll(".platform-checkbox")].filter(cb => cb.checked).map(cb => cb.value);
+      selected.forEach(platform => {
+        const section = document.createElement("div");
+        section.innerHTML = `<h2 class="text-xl font-bold mb-2 capitalize">${platform} Setup</h2>`;
+        platformSteps[platform].forEach((step, i) => {
+          const stepDiv = document.createElement("div");
+          stepDiv.className = "step-card bg-white border rounded-xl p-4 mb-3";
+
+          let content = `<p class="font-semibold">${step.text}</p>`;
+          if (step.link) content += ` <a href="${step.link}" target="_blank" class="ml-2 text-blue-600 underline">Open link</a>`;
+          if (step.video) content += ` <button onclick="showVideo('${step.video}')" class="ml-2 text-[#e3ad55] underline">🎥 Show video</button>`;
+
+          if (step.dynamic) {
+            content += `<div class='mt-2'><label class='mr-3'><input type='radio' name='pixel_${platform}' value='yes'> Pixel installed</label><label><input type='radio' name='pixel_${platform}' value='no'> No Pixel</label></div>`;
+          }
+
+          content += `<button onclick="markDone(this)" class="block mt-2 px-4 py-1 bg-[#e3ad55] text-white rounded">✅ I've done this</button>`;
+
+          stepDiv.innerHTML = content;
+          section.appendChild(stepDiv);
         });
         stepsContainer.appendChild(section);
       });
     }
 
-    function markDone(button) {
-      const step = button.parentElement;
-      step.classList.add('completed');
-      button.remove();
-      sendProgress();
+    function markDone(btn) {
+      btn.textContent = "✅ Completed";
+      btn.disabled = true;
+      btn.classList.add("opacity-60");
+
+      // Send progress to Google Sheets
+      fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+        method: "POST",
+        body: JSON.stringify({ step: btn.previousElementSibling?.textContent || "Step" }),
+        headers: { "Content-Type": "application/json" }
+      });
     }
 
-    function sendProgress() {
-      const completed = document.querySelectorAll('.completed p');
-      const steps = [...completed].map(e => e.innerText);
+    function showVideo(link) {
+      document.getElementById("videoContainer").innerHTML = `<iframe width='100%' height='350' src='${link}' frameborder='0' allowfullscreen></iframe>`;
+      document.getElementById("videoModal").style.display = "block";
+    }
 
-      axios.post('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
-        steps: steps,
-        timestamp: new Date().toISOString()
-      })
-      .then(res => console.log('Progress sent'))
-      .catch(err => console.error('Error sending progress', err));
+    function closeModal() {
+      document.getElementById("videoModal").style.display = "none";
+      document.getElementById("videoContainer").innerHTML = "";
     }
   </script></body>
 </html>
