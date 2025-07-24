@@ -2,189 +2,103 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Access Setup | MOBEK MEDIA</title>
+  <title>MOBEK MEDIA – Access Setup</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    const state = {
-      selectedPlatforms: [],
-      completedSteps: {}
-    };function togglePlatform(platform) {
-  const index = state.selectedPlatforms.indexOf(platform);
-  if (index > -1) {
-    state.selectedPlatforms.splice(index, 1);
-  } else {
-    state.selectedPlatforms.push(platform);
-  }
-  renderSteps();
-}
-
-function markStepDone(platform, index) {
-  if (!state.completedSteps[platform]) state.completedSteps[platform] = [];
-  state.completedSteps[platform][index] = true;
-  renderSteps();
-}
-
-function toggleVideo(videoId) {
-  const modal = document.getElementById(videoId);
-  modal.classList.toggle('hidden');
-}
-
-function renderSteps() {
-  const container = document.getElementById("stepsContainer");
-  container.innerHTML = "";
-
-  const steps = {
-    meta: [
-      {
-        label: "Add us as a partner on Meta Business Manager",
-        link: "https://business.facebook.com/settings/partners",
-        video: "https://www.loom.com/embed/sample-meta-video"
-      },
-      {
-        label: "Grant access to your Facebook Page",
-        link: "https://business.facebook.com/settings/pages"
-      },
-      {
-        label: "Grant access to your Ad Account",
-        link: "https://business.facebook.com/settings/ad-accounts"
-      },
-      {
-        label: "Is Pixel already installed?",
-        extra: true,
-        conditional: {
-          yes: null,
-          no: {
-            label: "Install Pixel",
-            link: "https://business.facebook.com/events_manager2/list"
-          }
-        }
-      },
-      {
-        label: "Do you have a Catalog?",
-        extra: true,
-        conditional: {
-          yes: {
-            label: "Share Catalog access",
-            link: "https://business.facebook.com/commerce_manager"
-          },
-          no: null
-        }
-      }
-    ],
-    tiktok: [
-      {
-        label: "Add us to your TikTok Business Center",
-        link: "https://business.tiktok.com/business-center"
-      },
-      {
-        label: "Grant access to Ad Account"
-      },
-      {
-        label: "Install TikTok Pixel",
-        link: "https://ads.tiktok.com/help/article?aid=10088"
-      }
-    ],
-    google: [
-      {
-        label: "Grant access to Google Ads",
-        link: "https://ads.google.com/home/"
-      },
-      {
-        label: "Install Google Tag Manager or Tag",
-        link: "https://tagmanager.google.com/"
-      }
-    ]
-  };
-
-  state.selectedPlatforms.forEach(platform => {
-    const section = document.createElement("div");
-    section.className = "mb-6 p-4 bg-white shadow rounded-xl";
-
-    const title = document.createElement("h3");
-    title.className = "text-lg font-semibold text-gray-800 mb-2 capitalize";
-    title.innerText = platform + " Setup";
-    section.appendChild(title);
-
-    steps[platform].forEach((step, index) => {
-      const stepDiv = document.createElement("div");
-      stepDiv.className = "flex items-start gap-3 mb-3";
-
-      const checkbox = document.createElement("button");
-      checkbox.className = "mt-1 text-green-600";
-      checkbox.innerHTML = state.completedSteps[platform]?.[index] ? "✅" : "⬜";
-      checkbox.onclick = () => markStepDone(platform, index);
-
-      const label = document.createElement("div");
-      label.innerHTML = `<span class='font-medium'>${step.label}</span>`;
-
-      if (step.link) {
-        label.innerHTML += ` — <a href='${step.link}' target='_blank' class='text-blue-600 underline'>Go to link</a>`;
-      }
-
-      if (step.video) {
-        label.innerHTML += ` <button onclick="toggleVideo('video_${platform}_${index}')" class="ml-2 text-sm text-yellow-700 border px-2 rounded hover:bg-yellow-50">🎥 Show Video</button>`;
-
-        const videoModal = document.createElement("div");
-        videoModal.id = `video_${platform}_${index}`;
-        videoModal.className = "hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-        videoModal.innerHTML = `
-          <div class="bg-white p-4 rounded shadow-xl w-full max-w-2xl">
-            <iframe class="w-full h-64" src='${step.video}' frameborder='0' allowfullscreen></iframe>
-            <button onclick="toggleVideo('video_${platform}_${index}')" class="mt-4 bg-red-600 text-white px-3 py-1 rounded">Close</button>
-          </div>`;
-        document.body.appendChild(videoModal);
-      }
-
-      stepDiv.appendChild(checkbox);
-      stepDiv.appendChild(label);
-      section.appendChild(stepDiv);
-
-      // conditional extras
-      if (step.extra && step.conditional) {
-        const btnGroup = document.createElement("div");
-        btnGroup.className = "ml-6 flex gap-3";
-
-        const yesBtn = document.createElement("button");
-        yesBtn.innerText = "✅ Yes";
-        yesBtn.className = "bg-green-200 px-2 rounded";
-        yesBtn.onclick = () => {
-          if (step.conditional.yes) window.open(step.conditional.yes.link, '_blank');
-        };
-
-        const noBtn = document.createElement("button");
-        noBtn.innerText = "❌ No";
-        noBtn.className = "bg-red-200 px-2 rounded";
-        noBtn.onclick = () => {
-          if (step.conditional.no) window.open(step.conditional.no.link, '_blank');
-        };
-
-        btnGroup.appendChild(yesBtn);
-        btnGroup.appendChild(noBtn);
-        section.appendChild(btnGroup);
-      }
-    });
-
-    container.appendChild(section);
-  });
-}
-
-  </script>
+  <style>
+    .checked::before {
+      content: '✅';
+      margin-right: 8px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
-  <div class="max-w-3xl mx-auto py-10 px-6">
-    <h1 class="text-3xl font-bold text-center text-yellow-700 mb-6">MOBEK MEDIA Access Setup</h1>
-    <p class="text-gray-700 text-center mb-6">Please select the platforms you’d like us to advertise on:</p><div class="flex justify-center gap-4 mb-8">
-  <button onclick="togglePlatform('meta')" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Meta</button>
-  <button onclick="togglePlatform('tiktok')" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">TikTok</button>
-  <button onclick="togglePlatform('google')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Google</button>
-</div>
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-[#e3ad55] py-4 text-center text-white text-2xl font-bold">
+    MOBEK MEDIA – Access Setup
+  </header>  <main class="max-w-3xl mx-auto p-4">
+    <!-- Step 1: Platform Selection -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-2">Which platforms do you want to advertise on?</h2>
+      <div id="platformSelect" class="flex gap-4 flex-wrap">
+        <button class="px-4 py-2 border-2 border-[#e3ad55] rounded-lg hover:bg-[#e3ad55] hover:text-white transition" onclick="selectPlatform('meta')">Meta</button>
+        <button class="px-4 py-2 border-2 border-[#e3ad55] rounded-lg hover:bg-[#e3ad55] hover:text-white transition" onclick="selectPlatform('tiktok')">TikTok</button>
+        <button class="px-4 py-2 border-2 border-[#e3ad55] rounded-lg hover:bg-[#e3ad55] hover:text-white transition" onclick="selectPlatform('google')">Google</button>
+      </div>
+    </div><!-- Steps Container -->
+<div id="stepsContainer" class="space-y-6"></div>
 
-<div id="stepsContainer"></div>
+  </main>  <!-- Modal for Videos -->  <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl overflow-hidden max-w-2xl w-full p-4 relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-xl font-bold">&times;</button>
+      <div id="videoContainer" class="w-full aspect-video"></div>
+    </div>
+  </div>  <script>
+    const steps = {
+      meta: [
+        { label: "Grant access to Business Manager", link: "https://business.facebook.com/settings/partners", video: "https://www.loom.com/embed/sample-meta-business" },
+        { label: "Grant access to Ad Account", link: "https://business.facebook.com/settings/ad-accounts", video: "https://www.loom.com/embed/sample-meta-ad-account" },
+        { label: "Grant access to Facebook Page", link: "https://business.facebook.com/settings/pages", video: "https://www.loom.com/embed/sample-meta-page" },
+        { label: "Is the Facebook Pixel installed?", type: "pixel" },
+        { label: "Do you have a Product Catalog?", type: "catalog" },
+        { label: "Share website & landing page access (if available)", type: "info" }
+      ],
+      tiktok: [
+        { label: "Grant access via TikTok Business Center", link: "https://business.tiktok.com/business-center/partners", video: "https://www.loom.com/embed/sample-tiktok-access" },
+        { label: "Install TikTok Pixel or Tag Manager", link: "https://ads.tiktok.com/help/article?aid=10008072", video: "https://www.loom.com/embed/sample-tiktok-pixel" },
+        { label: "Share website & landing page access (if available)", type: "info" }
+      ],
+      google: [
+        { label: "Grant access to Google Ads account", link: "https://ads.google.com/home/tools/manager-accounts/", video: "https://www.loom.com/embed/sample-google-ads" },
+        { label: "Grant access via Tag Manager (Pixel)", link: "https://tagmanager.google.com/", video: "https://www.loom.com/embed/sample-google-tag" },
+        { label: "Share website & landing page access (if available)", type: "info" }
+      ]
+    };
 
-<div class="mt-10 text-sm text-gray-500 text-center">
-  Need landing pages or a website? <strong>Please let us know!</strong>
-</div>
+    function selectPlatform(platform) {
+      const container = document.getElementById('stepsContainer');
+      container.innerHTML = '';
+      steps[platform].forEach((step, index) => {
+        const div = document.createElement('div');
+        div.className = 'bg-white shadow p-4 rounded-lg flex justify-between items-center';
 
-  </div>
-</body>
+        if (step.type === 'pixel') {
+          div.innerHTML = `
+            <span>Pixel not installed?</span>
+            <a href="https://business.facebook.com/events_manager2/list/pixel" class="text-blue-600 underline">Set it up</a>
+          `;
+        } else if (step.type === 'catalog') {
+          div.innerHTML = `
+            <span>Have a catalog to connect?</span>
+            <a href="https://www.facebook.com/products/catalogs" class="text-blue-600 underline">Connect it</a>
+          `;
+        } else if (step.type === 'info') {
+          div.innerHTML = `
+            <span>Please share access to your website and landing pages (via login or CMS)</span>
+          `;
+        } else {
+          div.innerHTML = `
+            <span>${step.label}</span>
+            <div class="flex items-center gap-3">
+              <a href="${step.link}" target="_blank" class="bg-[#e3ad55] text-white px-3 py-1 rounded">Go</a>
+              <button onclick="showVideo('${step.video}')" class="text-blue-600 underline">🎥 Show Video</button>
+              <span class="text-green-600 hidden step-done">✅</span>
+            </div>
+          `;
+        }
+        container.appendChild(div);
+      });
+    }
+
+    function showVideo(videoUrl) {
+      const modal = document.getElementById('videoModal');
+      const container = document.getElementById('videoContainer');
+      container.innerHTML = `<iframe src="${videoUrl}" frameborder="0" allowfullscreen class="w-full h-full"></iframe>`;
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('videoModal');
+      modal.classList.add('hidden');
+      document.getElementById('videoContainer').innerHTML = '';
+    }
+  </script></body>
 </html>
